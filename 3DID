@@ -1,0 +1,147 @@
+import time
+from pathlib import Path
+import joblib
+import gc
+import numpy as np
+from utils.train_tools import load_data_area, load_xgboost, predict_result, plot_xgboost
+
+from utils.Data_PreProcess.Prepare_Dataset.prepare_s3dis import S3DISDataSet
+from utils.Data_PreProcess.RandLA_Downsampling.downsample_data import VoxelDataset
+from utils.Data_PreProcess.Feature.augment_feature import DataAugmentation
+
+from utils.hop_train import EncoderDecoder
+import xgboost as xgb
+
+ROOT_PATH = (Path(__file__) / '..' / '..').resolve()
+print(ROOT_PATH)
+
+FILE_TRAIN = "train"
+FILE_TEST = "test"
+
+MODEL_PATH = ROOT_PATH / 'models' / 'xgboost_model.joblib'
+
+TEST_AREA_NUM = 6
+
+SHOW_TEST_RESULTS = True
+
+USE_GPU = True
+
+n_estimators = 128
+
+
+# 預處理
+def data_process():
+    S3DISDataSet(test_area_num=TEST_AREA_NUM, can_clear=False).prepare()
+    VoxelDataset(can_clear=False).preprocess()
+    DataAugmentation(can_clear=False).preprocess()
+    EncoderDecoder(ratios=[0.25, 0.25, 0.5, 0.5], k=64, can_clear=False).write_features()
+
+
+def get_model():
+    parm = {"n_estimators": n_estimators,
+            "eval_metric": ["merror", "mlogloss"],
+            # "early_stopping_rounds": 15,
+            'max_depth': 6,
+            'objective': 'multi:softmax'}
+    if USE_GPU:
+        parm["tree_method"] = "hist"
+        parm["device"] = "cuda"
+
+    return xgb.XGBClassifier(**parm)
+
+
+def extract_features(point_cloud):
+    # 計算每個點的均值和標準差
+    mean_values = np.mean(point_cloud, axis=1)  # 計算每個點的均值，axis=1表示按行計算
+    std_values = np.std(point_cloud, axis=1)  # 計算每個點的標準差，axis=1表示按行計算
+
+    # 將均值和標準差組合成特徵向量
+    features = np.column_stack((mean_values, std_values))  # 使用column_stack將均值和標準差組合成特徵向量
+
+    return features
+
+
+def load_and_extract_data():
+    train_areas = []
+    train_label_nums = []
+    test_areas = []
+    test_label_nums = []
+    print("[新增訓練 Areas]")
+    for area in range(1, 7):
+        if area != TEST_AREA_NUM:
+            train_area, train_label_num = load_data_area(FILE_TRAIN, area)
+            hop1 = extract_features(train_area[:, 21:52]).astype(np.float16)
+            hop2 = extract_features(train_area[:, 52:93]).astype(np.float16)
+            hop3 = extract_features(train_area[:, 93:144]).astype(np.float16)
+            hop4 = extract_features(train_area[:, 144:]).astype(np.float16)
+
+            train_extract = np.concatenate((hop1, hop2, hop3, hop4), axis=1)
+            train_areas.append(train_extract)
+            train_label_nums.append(train_label_num)
+
+        else:
+            test_area, test_label_num = load_data_area(FILE_TEST, area)
+            hop1 = extract_features(test_area[:, 21:52]).astype(np.float16)
+            hop2 = extract_features(test_area[:, 52:93]).astype(np.float16)
+            hop3 = extract_features(test_area[:, 93:144]).astype(np.float16)
+            hop4 = extract_features(test_area[:, 144:]).astype(np.float16)
+
+            test_extract = np.concatenate((hop1, hop2, hop3, hop4), axis=1)
+            test_areas.append(test_extract)
+            test_label_nums.append(test_label_num)
+
+    train_areas = np.concatenate(train_areas, axis=0)
+    train_label_nums = np.concatenate(train_label_nums, axis=0)
+    test_areas = np.concatenate(test_areas, axis=0)
+    test_label_nums = np.concatenate(test_label_nums, axis=0)
+
+    print(f"extract train shape: {train_areas.shape}")
+    print(f"label shape: {train_label_nums.shape}")
+
+    print(f"extract test shape: {test_areas.shape}")
+    print(f"label shape: {test_label_nums.shape}")
+    gc.collect()
+
+    return train_areas, train_label_nums, test_areas, test_label_nums
+
+
+def train_xgboost_classifier():
+    train_areas, train_label_nums, test_areas, test_label_nums = load_and_extract_data()
+    # 定義驗證集
+    eval_set = [(train_areas, train_label_nums), (test_areas, test_label_nums)]
+
+    model = get_model()
+    # 訓練模型並印出每次迭代結果
+    model.fit(train_areas, train_label_nums, eval_set=eval_set, verbose=True)
+
+    print("存入model中....")
+    joblib.dump(model, MODEL_PATH)
+
+    gc.collect()
+
+
+def main():
+    print("-------------[特徵擷取]----------------------")
+    # 預處理+Encoder
+    data_process()
+
+    print("--------------[特徵分類訓練]----------------------")
+    # 訓練所有特徵
+    train_xgboost_classifier()
+
+    print("--------------[可視化結果]----------------------")
+    plot_xgboost(MODEL_PATH)
+    print("已可視化train/test")
+
+    if SHOW_TEST_RESULTS:
+        print("--------------[特徵分類預測]----------------------")
+        _, predictions, true_labels = load_xgboost(MODEL_PATH, TEST_AREA_NUM, is_gpu=USE_GPU)
+        predict_result(predictions, true_labels)
+
+
+if __name__ == '__main__':
+    start_time = time.time()
+    main()
+    end_time = time.time()  # 結束計時
+    execution_time = end_time - start_time
+    print(f"執行時間: {execution_time} 秒")
