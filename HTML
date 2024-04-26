@@ -1,1 +1,73 @@
+# 主程式
+def main():
+    st.title('線性回歸分析應用')
+
+    # 載入資料
+    file_path = 'D:\AI project\data.csv'
+    data = load_data(file_path)
+
+    if data is None:
+        return
+
+    # 檢查資料類型
+    numerical_columns = data.select_dtypes(include=[np.number]).columns.tolist()
+    categorical_columns = data.select_dtypes(include=['object']).columns.tolist()
+
+    if not numerical_columns:
+        st.error("資料中沒有數值型特徵，無法進行分析。")
+        return
+
+    # 選擇特徵和目標變數
+    features = st.multiselect('選擇特徵', numerical_columns)
+    target = st.selectbox('選擇目標變數', numerical_columns)
+
+    if not features:
+        st.warning("請至少選擇一個數值型特徵")
+        return
+
+    # 分割資料集
+    X = data[features]
+    y = data[target]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # 檢查資料是否違反規則
+    violated_rule = None
+    rule_selection = st.radio('請選擇違反的規則', ['線性性', '常態性', '獨立性', '同方差性'])
+
+    if rule_selection == '線性性':
+        violated_rule = '散點圖呈現出非線性的關係模式，或者殘差圖呈現出明顯的模式或趨勢。'
+        st.info('將使用多項式歸一法進行變數轉換')
+        st.info('多項式歸一法是一種將自變數進行多項式轉換的方法，常用的轉換方式包括添加自變數的平方項、立方項等高次項，以捕捉因變數和自變數之間的非線性關係。')
+        degree = st.slider('選擇多項式的次數', 2, 10, 3)
+        poly = PolynomialFeatures(degree=degree)
+        X_train = poly.fit_transform(X_train)
+        X_test = poly.transform(X_test)
+    elif rule_selection == '常態性':
+        violated_rule = '殘差圖呈現出明顯的模式、左右不對稱或者尖峰厚尾，或者Q-Q plot不在一條直線上。'
+        st.info('將使用Box-Cox進行變數轉換')
+        st.info('Box-Cox轉換是一種用於處理常態性假設違反的方法，它通過一個參數 𝜆 來調整轉換的形式。可以使資料更接近常態分佈，進而符合常態性假設。')
+        power_transformer = PowerTransformer(method='box-cox')
+        X_train = power_transformer.fit_transform(X_train)
+        X_test = power_transformer.transform(X_test)
+    elif rule_selection == '獨立性':
+        violated_rule = '殘差之間呈現出相關性或者有周期性的變化。'
+        st.info('將使用羅吉斯特轉換進行變數轉換')
+        st.info('羅吉斯特轉換是一種將線性關係轉換為非線性的方法，通常應用於處理二元或多元分類問題。羅吉斯特轉換常用於羅吉斯特回歸模型中，用於預測二元或多元分類的結果。它將線性預測轉換為 0 到 1 之間的概率值，通過設定一個閾值來進行分類。')
+        logistic_transformer = PowerTransformer(method='yeo-johnson')
+        X_train = logistic_transformer.fit_transform(X_train)
+        X_test = logistic_transformer.transform(X_test)
+    elif rule_selection == '同方差性':
+        violated_rule = '殘差的散佈圖呈現出漏斗形狀或者方差不均勻的特徵。'
+        st.info('將使用對數轉換進行變數轉換')
+        st.info('對數轉換是一種常用的變數轉換方法，特別適用於處理右偏或指數增長的資料。對數轉換可以將大範圍的數值壓縮到較小的範圍內，同時也可以使資料更接近常態分佈。')
+        X_train = np.log1p(X_train)
+        X_test = np.log1p(X_test)
+
+    # 顯示違反規則的原因
+    if violated_rule:
+        st.subheader('違反規則原因')
+        st.write(violated_rule)
+
+if __name__ == '__main__':
+    main()
 
