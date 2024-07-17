@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POKER</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e2b3a;
+            color: #fff;
+        }
+        .container {
+            display: grid;
+            grid-template-areas:
+                "title title title"
+                "level remaining-time time"
+                "players blinds break"
+                "entrants ante avg-chips"
+                ". next-level total-chips";
+            grid-template-rows: auto auto auto 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
+            min-height: 100vh;
+            padding: 40px;
+            box-sizing: border-box;
+            background-color: #0c4175;
+            gap: 40px; 
+        }
+        .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .title {
+            grid-area: title;
+            font-size: 5rem;
+            font-weight: bold;
+        }
+        .time {
+            grid-area: time;
+            font-size: 4rem;
+            text-align: right;
+        }
+        .level {
+            grid-area: level;
+            font-size: 4rem;
+            justify-content: flex-start;
+            text-align: left;
+        }
+        .players {
+            grid-area: players;
+            font-size: 4rem;
+            justify-content: flex-start;
+            text-align: left;
+        }
+        .entrants {
+            grid-area: entrants;
+            font-size: 4rem;
+            justify-content: flex-start;
+            text-align: left;
+        }
+        .break {
+            grid-area: break;
+            font-size: 4rem;
+            text-align: right;
+        }
+        .avg-chips {
+            grid-area: avg-chips;
+            font-size: 4rem;
+            text-align: right;
+        }
+        .total-chips {
+            grid-area: total-chips;
+            font-size: 4rem;
+            text-align: right;
+        }
+        .remaining-time {
+            grid-area: remaining-time;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        .blinds {
+            grid-area: blinds;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        .ante {
+            grid-area: ante;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        .next-level {
+            grid-area: next-level;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="section title" id="title">下午茶</div>
+        <div class="section remaining-time" id="remaining-time">剩餘時間: 00:00:00</div>
+        <div class="section next-level" id="next-level">下個級別: 0/0 [0]</div>
+        <div class="section level" id="level">當前級別: 8</div>
+        <div class="section players" id="players-left">剩餘人數: 11</div>
+        <div class="section entrants" id="entrants">參賽人數: 23</div>
+        <div class="section time" id="time">現在時間: 12:48:00</div>
+        <div class="section break" id="next-break">下次休息: 00:12:48</div>
+        <div class="section avg-chips" id="avg-chips">平均記分牌: 41,818</div>
+        <div class="section total-chips" id="total-chips">總記分牌: 460,000</div>
+        <div class="section blinds" id="blinds">盲注: 0/0</div>
+        <div class="section ante" id="ante">前注: 0</div>
+    </div>
+    <script>
+        let data = {
+            title: '下午茶',
+            level: 8,
+            playersLeft: 11,
+            entrants: 23,
+            avgChips: '41,818',
+            totalChips: '460,000',
+            nextLevel: '0/0 [0]',
+            blinds: '0/0',
+            ante: '0',
+            nextBreak: 768,
+            remainingTime: 3600
+        };
+
+        function updateTime() {
+            const timeElement = document.querySelector('#time');
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            timeElement.textContent = `現在時間: ${hours}:${minutes}:${seconds}`;
+        }
+
+        function updateData() {
+            const storedData = localStorage.getItem('pokerData');
+            if (storedData) {
+                data = JSON.parse(storedData);
+            }
+
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('level').textContent = `當前級別: ${data.level}`;
+            document.getElementById('players-left').textContent = `剩餘人數: ${data.playersLeft}`;
+            document.getElementById('entrants').textContent = `參賽人數: ${data.entrants}`;
+            document.getElementById('avg-chips').textContent = `平均記分牌: ${data.avgChips}`;
+            document.getElementById('total-chips').textContent = `總記分牌: ${data.totalChips}`;
+            document.getElementById('next-level').textContent = `下個級別: ${data.nextLevel}`;
+            document.getElementById('blinds').textContent = `盲注 : ${data.blinds}`;
+            document.getElementById('ante').textContent = `前注: ${data.ante}`;
+        }
+
+        function updateCountdown() {
+            const nextBreakElement = document.getElementById('next-break');
+            let minutes = Math.floor(data.nextBreak / 60);
+            let seconds = data.nextBreak % 60;
+            nextBreakElement.textContent = `下次休息: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            if (data.nextBreak > 0) {
+                data.nextBreak--;
+            }
+        }
+
+        function updateRemainingTime() {
+            const remainingTimeElement = document.getElementById('remaining-time');
+            let minutes = Math.floor(data.remainingTime / 60);
+            let seconds = data.remainingTime % 60;
+            remainingTimeElement.textContent = `剩餘時間: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            if (data.remainingTime > 0) {
+                data.remainingTime--;
+            }
+        }
+
+        function enterFullscreen() {
+            const container = document.getElementById('container');
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.mozRequestFullScreen) { // Firefox
+                container.mozRequestFullScreen();
+            } else if (container.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                container.webkitRequestFullscreen();
+            } else if (container.msRequestFullscreen) { // IE/Edge
+                container.msRequestFullscreen();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            enterFullscreen();
+            updateData();
+            updateTime();
+            updateCountdown();
+            updateRemainingTime();
+            setInterval(updateTime, 1000);
+            setInterval(updateCountdown, 1000);
+            setInterval(updateRemainingTime, 1000);
+        });
+    </script>
+</body>
+</html>

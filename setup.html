@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup POKER</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e2b3a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .form-container {
+            background-color: #0c4175;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>設定 POKER 資訊</h1>
+        <div class="form-group">
+            <label for="title">標題</label>
+            <input type="text" id="title" placeholder="輸入標題">
+        </div>
+        <div class="form-group">
+            <label for="level">當前級別</label>
+            <input type="number" id="level" value="0" min="0">
+        </div>
+        <div class="form-group">
+            <label for="playersLeft">剩餘人數</label>
+            <input type="number" id="playersLeft" value="0" min="0">
+        </div>
+        <div class="form-group">
+            <label for="entrants">參賽人數</label>
+            <input type="number" id="entrants" value="0" min="0">
+        </div>
+        <div class="form-group">
+            <label for="nextBreak">下次休息 (分:秒)</label>
+            <input type="text" id="nextBreak" placeholder="分:秒">
+        </div>
+        <div class="form-group">
+            <label for="remainingTime">剩餘時間 (分:秒)</label>
+            <input type="text" id="remainingTime" placeholder="分:秒">
+        </div>
+        <div class="form-group">
+            <label for="avgChips">平均記分牌</label>
+            <input type="number" id="avgChips" value="0" min="0">
+        </div>
+        <div class="form-group">
+            <label for="totalChips">總記分牌</label>
+            <input type="number" id="totalChips" value="0" min="0">
+        </div>
+        <div class="form-group">
+            <label for="blinds">盲注</label>
+            <input type="text" id="blinds" value="">
+        </div>
+        <div class="form-group">
+            <label for="ante">前注</label>
+            <input type="number" id="ante" value="0" min="0">
+        </div>
+        <div class="form-group">
+            <label for="nextLevel">下個級別</label>
+            <input type="text" id="nextLevel" value="">
+        </div>
+        <button onclick="saveData()">創建</button>
+    </div>
+    <script>
+        function saveData() {
+            const nextBreakInput = document.getElementById('nextBreak').value.split(':');
+            const remainingTimeInput = document.getElementById('remainingTime').value.split(':');
+
+            let nextBreakInSeconds = 0;
+            if (nextBreakInput.length === 2) {
+                nextBreakInSeconds = parseInt(nextBreakInput[0], 10) * 60 + parseInt(nextBreakInput[1], 10);
+            } else {
+                alert('請輸入正確的下次休息時間格式 (分:秒)');
+                return;
+            }
+
+            let remainingTimeInSeconds = 0;
+            if (remainingTimeInput.length === 2) {
+                remainingTimeInSeconds = parseInt(remainingTimeInput[0], 10) * 60 + parseInt(remainingTimeInput[1], 10);
+            } else {
+                alert('請輸入正確的剩餘時間格式 (分:秒)');
+                return;
+            }
+
+            const level = parseInt(document.getElementById('level').value, 10);
+            if (level < 0) {
+                alert('當前級別不能小於0');
+                return;
+            }
+
+            const playersLeft = parseInt(document.getElementById('playersLeft').value, 10);
+            if (playersLeft < 0) {
+                alert('剩餘人數不能小於0');
+                return;
+            }
+
+            const entrants = parseInt(document.getElementById('entrants').value, 10);
+            if (entrants < 0) {
+                alert('參賽人數不能小於0');
+                return;
+            }
+
+            const avgChips = parseInt(document.getElementById('avgChips').value, 10);
+            if (avgChips < 0) {
+                alert('平均記分牌不能小於0');
+                return;
+            }
+
+            const totalChips = parseInt(document.getElementById('totalChips').value, 10);
+            if (totalChips < 0) {
+                alert('總記分牌不能小於0');
+                return;
+            }
+
+            const ante = parseInt(document.getElementById('ante').value, 10);
+            if (ante < 0) {
+                alert('前注不能小於0');
+                return;
+            }
+
+            const data = {
+                title: document.getElementById('title').value,
+                level: level,
+                playersLeft: playersLeft,
+                entrants: entrants,
+                nextBreak: nextBreakInSeconds,
+                remainingTime: remainingTimeInSeconds,
+                avgChips: avgChips,
+                totalChips: totalChips,
+                blinds: document.getElementById('blinds').value,
+                ante: ante,
+                nextLevel: document.getElementById('nextLevel').value
+            };
+
+            localStorage.setItem('pokerData', JSON.stringify(data));
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
