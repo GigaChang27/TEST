@@ -47,6 +47,13 @@
         button:hover {
             background-color: #0056b3;
         }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -96,10 +103,15 @@
             <label for="nextLevel">下個級別</label>
             <input type="text" id="nextLevel" value="">
         </div>
-        <button onclick="saveData()">創建</button>
+        <button onclick="createNew()">創建新表單</button>
+        <button onclick="saveData()">保存</button>
+        <button onclick="loadData()">載入</button>
+        <button onclick="resetForm()">重置</button>
+        <ul id="savedSettings"></ul>
     </div>
+
     <script>
-        function saveData() {
+        function createNew() {
             const nextBreakInput = document.getElementById('nextBreak').value.split(':');
             const remainingTimeInput = document.getElementById('remainingTime').value.split(':');
 
@@ -170,8 +182,100 @@
             };
 
             localStorage.setItem('pokerData', JSON.stringify(data));
-            window.location.href = 'index.html';
+            window.open('index.html', '_blank');
         }
+        // 保存設置
+        function saveData() {
+            const nextBreakInput = document.getElementById('nextBreak').value.split(':');
+            const remainingTimeInput = document.getElementById('remainingTime').value.split(':');
+
+            let nextBreakInSeconds = 0;
+            if (nextBreakInput.length === 2) {
+                nextBreakInSeconds = parseInt(nextBreakInput[0], 10) * 60 + parseInt(nextBreakInput[1], 10);
+            }
+
+            let remainingTimeInSeconds = 0;
+            if (remainingTimeInput.length === 2) {
+                remainingTimeInSeconds = parseInt(remainingTimeInput[0], 10) * 60 + parseInt(remainingTimeInput[1], 10);
+            }
+
+            const data = {
+                title: document.getElementById('title').value,
+                level: parseInt(document.getElementById('level').value, 10),
+                playersLeft: parseInt(document.getElementById('playersLeft').value, 10),
+                entrants: parseInt(document.getElementById('entrants').value, 10),
+                nextBreak: nextBreakInSeconds,
+                remainingTime: remainingTimeInSeconds,
+                avgChips: parseInt(document.getElementById('avgChips').value, 10),
+                totalChips: parseInt(document.getElementById('totalChips').value, 10),
+                blinds: document.getElementById('blinds').value,
+                ante: parseInt(document.getElementById('ante').value, 10),
+                nextLevel: document.getElementById('nextLevel').value
+            };
+
+            const settingsName = prompt('請輸入設置名稱');
+            if (settingsName) {
+                localStorage.setItem(settingsName, JSON.stringify(data));
+                updateSavedSettingsList();
+            }
+        }
+
+        // 載入設置
+        function loadData() {
+            const settingsName = prompt('請輸入要載入的設置名稱');
+            if (settingsName && localStorage.getItem(settingsName)) {
+                const data = JSON.parse(localStorage.getItem(settingsName));
+                document.getElementById('title').value = data.title;
+                document.getElementById('level').value = data.level;
+                document.getElementById('playersLeft').value = data.playersLeft;
+                document.getElementById('entrants').value = data.entrants;
+                document.getElementById('nextBreak').value = formatTime(data.nextBreak);
+                document.getElementById('remainingTime').value = formatTime(data.remainingTime);
+                document.getElementById('avgChips').value = data.avgChips;
+                document.getElementById('totalChips').value = data.totalChips;
+                document.getElementById('blinds').value = data.blinds;
+                document.getElementById('ante').value = data.ante;
+                document.getElementById('nextLevel').value = data.nextLevel;
+            } else {
+                alert('找不到該設置名稱');
+            }
+        }
+
+        // 重置表單
+        function resetForm() {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="password"], input[type="tel"], input[type="email"], textarea, select');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+
+        // 格式化時間為分:秒
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        }
+
+        // 更新保存的設置列表
+        function updateSavedSettingsList() {
+            const savedSettings = document.getElementById('savedSettings');
+            savedSettings.innerHTML = '';
+            for (let i = 0; i < localStorage.length; i++) {
+                const settingsName = localStorage.key(i);
+                const listItem = document.createElement('li');
+                listItem.textContent = settingsName;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '刪除';
+                deleteButton.onclick = function() {
+                    localStorage.removeItem(settingsName);
+                    updateSavedSettingsList();
+                };
+                listItem.appendChild(deleteButton);
+                savedSettings.appendChild(listItem);
+            }
+        }
+
+        updateSavedSettingsList(); // 初始化保存的设置列表
     </script>
 </body>
 </html>
