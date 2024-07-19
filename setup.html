@@ -3,412 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POKER</title>
+    <title>Setup POKER</title>
     <style>
-        body, html {
-            height: 100%;
+        body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: url('background.png') no-repeat center center fixed;
-            background-size: cover;
-            color: #fff;
-        }
-        .container {
-            min-height: 100vh;
-            padding: 40px;
-            box-sizing: border-box;
-            background-color: rgba(4, 40, 77, 0.8); /* Semi-transparent background */
-            gap: 20px;
-        }
-        .section {
-            position: absolute;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .title {
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 80px;
-            font-weight: bold;
-        }
-        .time {
-            top: 40px;
-            left: 75%;
-            font-size: 50px;
-            text-align: left;
-        }
-        .level, .players, .entrants, .break, .avg-chips, .total-chips {
-            font-size: 50px;
-        }
-        .level {
-            top: 25%;
-            right: 75%;
-            text-align: right;
-        }
-        .players {
-            top: 50%;
-            right: 75%;
-            text-align: right;
-        }
-        .entrants {
-            top: 75%;
-            right: 75%;
-            text-align: right;
-        }
-        .break {
-            top: 25%;
-            left: 75%;
-            text-align: left;
-        }
-        .avg-chips {
-            top: 50%;
-            left: 75%;
-            text-align: left;
-        }
-        .total-chips {
-            top: 75%;
-            left: 75%;
-            text-align: left;
-        }
-        .remaining-time {
-            top: 150px;
-            left: 50%;
-            font-size: 340px;
-            transform: translateX(-50%);
-            font-weight: bold;
-            text-align: center;
-        }
-        .blinds {
-            top: 60%;
-            left: 29%;
-            transform: translateX(-50%);
-            font-weight: bold;
-            text-align: left;
-            font-size: 45px;
-        }
-        .ante {
-            top: 70%;
-            left: 28.5%;
-            transform: translateX(-50%);
-            font-weight: bold;
-            text-align: left;
-            font-size: 45px;
-        }
-        .next-level {
-            top: 80%;
-            left: 31%;
-            transform: translateX(-50%);
-            font-weight: bold;
-            text-align: left;
-            font-size: 45px;
-        }
-        .blinds1 {
-            top: 60%;
-            right: 18%;
-            transform: translateX(-50%);
-            font-weight: bold;
-            text-align: right;
-            font-size: 45px;
-        }
-        .ante1 {
-            top: 70%;
-            right: 21%;
-            transform: translateX(-50%);
-            font-weight: bold;
-            text-align: right;
-            font-size: 45px;
-        }
-        .next-level1 {
-            top: 80%;
-            right: 18.5%;
-            transform: translateX(-50%);
-            font-weight: bold;
-            text-align: right;
-            font-size: 45px;
-        }
-        .button {
-            background-color: rgba(4, 40, 77, 0.8);;
-            border: 1px solid rgba(4, 40, 77, 0.8);;
-            color: rgba(4, 40, 77, 0.8);;
-            font-size: 10px;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin: 0 10px;
-        }
-        .button1 {
-            background-color: rgba(4, 40, 77, 0.8);;
-            border: 1px solid rgba(4, 40, 77, 0.8);;
-            color: rgba(4, 40, 77, 0.8);;
-            font-size: 10px;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin: 0 10px;
-        }
-        .pause-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: #1e2b3a;
             color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 80px;
-            z-index: 10;
-            display: none;
-            pointer-events: none;
+            min-height: 100vh;
         }
-        .top-right-buttons {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        .main-container {
             display: flex;
-            gap: 10px;
-            z-index: 20;
+            justify-content: center;
+            width: 80%;
+            max-width: 1000px;
         }
-        .adjust-buttons1 {
-            position: fixed;
-            top: 70%;
-            right: 76%;
-            display: flex;
-            gap: 1px;
-            z-index: 20;
+        .form-container {
+            background-color: #0c4175;
+            padding: 20px;
+            border-radius: 10px;
+            width: 60%;
+            margin-right: 20px;
         }
-        .adjust-buttons2 {
-            position: fixed;
-            top: 95%;
-            right: 76%;
-            display: flex;
-            gap: 1px;
-            z-index: 20;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .section span.zh {
+        label {
             display: block;
-            font-family: 'Noto Sans TC', sans-serif;
+            margin-bottom: 5px;
         }
-        .section span.en {
-            display: block;
-            font-family: 'Arial', sans-serif;
-            font-size: 40px;
+        input, select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            box-sizing: border-box;
         }
-        .section span.num {
-            font-family: 'Courier New', monospace;
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .settings-list {
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 10px;
+            padding: 10px;
+            width: 50%;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .settings-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .settings-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+        .settings-list li:hover {
+            background-color: #ddd;
+        }
+        .settings-list .settings-info {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .settings-list button {
+            width: auto;
+            padding: 5px 5px;
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .settings-list button:hover {
+            background-color: #b8b1b1cb;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="section title" id="title">
-            <span class="zh">下午茶</span>
+    <div class="main-container">
+        <div class="form-container">
+            <h1>設定 POKER 資訊</h1>
+            <div class="form-group">
+                <label for="title">標題</label>
+                <input type="text" id="title" placeholder="輸入標題">
+            </div>
+            <div class="form-group">
+                <label for="level">當前級別</label>
+                <input type="number" id="level" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="playersLeft">剩餘人數</label>
+                <input type="number" id="playersLeft" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="entrants">參賽人數</label>
+                <input type="number" id="entrants" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="nextBreak">下次休息 (分:秒)</label>
+                <input type="text" id="nextBreak" placeholder="分:秒">
+            </div>
+            <div class="form-group">
+                <label for="remainingTime">剩餘時間 (分:秒)</label>
+                <input type="text" id="remainingTime" placeholder="分:秒">
+            </div>
+            <div class="form-group">
+                <label for="avgChips">平均記分牌</label>
+                <input type="number" id="avgChips" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="totalChips">總記分牌</label>
+                <input type="number" id="totalChips" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="blinds">盲注</label>
+                <input type="text" id="blinds" value="">
+            </div>
+            <div class="form-group">
+                <label for="ante">前注</label>
+                <input type="number" id="ante" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="nextLevel">下個級別</label>
+                <input type="text" id="nextLevel" value="">
+            </div>
+            <button onclick="createNew()">創建</button>
+            <button onclick="saveData()">保存</button>
+            <button onclick="resetForm()">重置</button>
         </div>
-        <div class="section remaining-time" id="remaining-time">
-            <span class="num">00:00:00</span>
-        </div>
-        <div class="section next-level" id="next-level">
-            <span class="zh">下個級別:</span>
-            <span class="en">Next Level:</span>
-        </div>
-        <div class="section next-level1" id="next-level1">
-            <span class="num">0/0</span>
-            <span class="zh">[</span>
-            <span class="num">0</span>
-            <span class="zh">]</span>
-        </div>
-        
-        <div class="section level" id="level">
-            <span class="zh">當前級別:</span>
-            <span class="en">Current Level:</span>
-            <span class="num">8</span>
-        </div>
-        <div class="section players" id="players-left">
-            <span class="zh">剩餘人數:</span>
-            <span class="en">Players Left:</span>
-            <span class="num">11</span>
-        </div>
-        <div class="adjust-buttons1">
-            <button class="button1" onclick="decrementPlayers()">-</button>
-            <button class="button1" onclick="incrementPlayers()">+</button>
-        </div>
-        
-        <div class="section entrants" id="entrants">
-            <span class="zh">參賽人數:</span>
-            <span class="en">Entrants:</span>
-            <span class="num">23</span>
-        </div>
-        <div class="adjust-buttons2">
-            <button class="button1" onclick="decrementEntrants()">-</button>
-            <button class="button1" onclick="incrementEntrants()">+</button>
-        </div>
-        <div class="section time" id="time">
-            <span class="zh">現在時間:</span>
-            <span class="en">Current Time:</span>
-            <span class="num">12:48:00</span>
-        </div>
-        <div class="section break" id="next-break">
-            <span class="zh">下次休息:</span>
-            <span class="en">Next Break:</span>
-            <span class="num">00:12:48</span>
-        </div>
-        <div class="section avg-chips" id="avg-chips">
-            <span class="zh">平均記分牌:</span>
-            <span class="en">Avg. Chips:</span>
-            <span class="num">41,818</span>
-        </div>
-        <div class="section total-chips" id="total-chips">
-            <span class="zh">總記分牌:</span>
-            <span class="en">Total Chips:</span>
-            <span class="num">460,000</span>
-        </div>
-        <div class="section blinds" id="blinds">
-            <span class="zh">盲注:</span>
-            <span class="en">Blinds:</span>  
-        </div>
-        <div class="section blinds1" id="blinds1">
-            <span class="num">0/0</span>
-        </div>
-        <div class="section ante1" id="ante1">
-            <span class="num">0</span>
-        </div>
-        <div class="section ante" id="ante">
-            <span class="zh">前注:</span>
-            <span class="en">Ante:</span>
+
+        <div id="settingsList" class="settings-list">
+            <h2>建立清單</h2>
+            <ul id="savedSettings"></ul>
         </div>
     </div>
-    <div class="top-right-buttons">
-        <button class="button" onclick="pause()">暫停</button>
-        <button class="button" onclick="resume()">繼續</button>
-    </div>
-    <div class="pause-overlay" id="pause-overlay">Pause</div>
+
     <script>
-        let data = {
-            title: '下午茶',
-            level: 8,
-            playersLeft: 11,
-            entrants: 23,
-            avgChips: '41,818',
-            totalChips: '460,000',
-            nextLevel: '0/0 [0]',
-            blinds: '0/0',
-            ante: '0',
-            nextBreak: 768,
-            remainingTime: 3600
-        };
+        function createNew() {
+            const nextBreakInput = document.getElementById('nextBreak').value.split(':');
+            const remainingTimeInput = document.getElementById('remainingTime').value.split(':');
 
-        let isPaused = false;
-        let intervalIds = [];
+            let nextBreakInSeconds = 0;
+            if (nextBreakInput.length === 2) {
+                nextBreakInSeconds = parseInt(nextBreakInput[0], 10) * 60 + parseInt(nextBreakInput[1], 10);
+            } else {
+                alert('請輸入正確的下次休息時間格式 (分:秒)');
+                return;
+            }
 
-        function padTime(number) {
-            return String(number).padStart(2, '0');
+            let remainingTimeInSeconds = 0;
+            if (remainingTimeInput.length === 2) {
+                remainingTimeInSeconds = parseInt(remainingTimeInput[0], 10) * 60 + parseInt(remainingTimeInput[1], 10);
+            } else {
+                alert('請輸入正確的剩餘時間格式 (分:秒)');
+                return;
+            }
+
+            const level = parseInt(document.getElementById('level').value, 10);
+            if (level < 0) {
+                alert('當前級別不能小於0');
+                return;
+            }
+
+            const playersLeft = parseInt(document.getElementById('playersLeft').value, 10);
+            if (playersLeft < 0) {
+                alert('剩餘人數不能小於0');
+                return;
+            }
+
+            const entrants = parseInt(document.getElementById('entrants').value, 10);
+            if (entrants < 0) {
+                alert('參賽人數不能小於0');
+                return;
+            }
+
+            const avgChips = parseInt(document.getElementById('avgChips').value, 10);
+            if (avgChips < 0) {
+                alert('平均記分牌不能小於0');
+                return;
+            }
+
+            const totalChips = parseInt(document.getElementById('totalChips').value, 10);
+            if (totalChips < 0) {
+                alert('總記分牌不能小於0');
+                return;
+            }
+
+            const ante = parseInt(document.getElementById('ante').value, 10);
+            if (ante < 0) {
+                alert('前注不能小於0');
+                return;
+            }
+
+            const data = {
+                title: document.getElementById('title').value,
+                level: level,
+                playersLeft: playersLeft,
+                entrants: entrants,
+                nextBreak: nextBreakInSeconds,
+                remainingTime: remainingTimeInSeconds,
+                avgChips: avgChips,
+                totalChips: totalChips,
+                blinds: document.getElementById('blinds').value,
+                ante: ante,
+                nextLevel: document.getElementById('nextLevel').value
+            };
+
+            localStorage.setItem('pokerData', JSON.stringify(data));
+            window.open('index.html', '_blank');
+        }
+        
+        function saveData() {
+            const title = document.getElementById('title').value;
+            if (!title) {
+                alert('請輸入標題');
+                return;
+            }
+
+            const nextBreakInput = document.getElementById('nextBreak').value.split(':');
+            const remainingTimeInput = document.getElementById('remainingTime').value.split(':');
+
+            let nextBreakInSeconds = 0;
+            if (nextBreakInput.length === 2) {
+                nextBreakInSeconds = parseInt(nextBreakInput[0], 10) * 60 + parseInt(nextBreakInput[1], 10);
+            }
+
+            let remainingTimeInSeconds = 0;
+            if (remainingTimeInput.length === 2) {
+                remainingTimeInSeconds = parseInt(remainingTimeInput[0], 10) * 60 + parseInt(remainingTimeInput[1], 10);
+            }
+
+            const data = {
+                title: title,
+                level: parseInt(document.getElementById('level').value, 10),
+                playersLeft: parseInt(document.getElementById('playersLeft').value, 10),
+                entrants: parseInt(document.getElementById('entrants').value, 10),
+                nextBreak: nextBreakInSeconds,
+                remainingTime: remainingTimeInSeconds,
+                avgChips: parseInt(document.getElementById('avgChips').value, 10),
+                totalChips: parseInt(document.getElementById('totalChips').value, 10),
+                blinds: document.getElementById('blinds').value,
+                ante: parseInt(document.getElementById('ante').value, 10),
+                nextLevel: document.getElementById('nextLevel').value,
+                timestamp: new Date().toLocaleString('zh-TW')
+            };
+
+            localStorage.setItem(title, JSON.stringify(data));
+            updateSavedSettingsList();
+        }
+
+        function loadData(settingsName) {
+            const data = JSON.parse(localStorage.getItem(settingsName));
+            document.getElementById('title').value = data.title;
+            document.getElementById('level').value = data.level;
+            document.getElementById('playersLeft').value = data.playersLeft;
+            document.getElementById('entrants').value = data.entrants;
+            document.getElementById('nextBreak').value = formatTime(data.nextBreak);
+            document.getElementById('remainingTime').value = formatTime(data.remainingTime);
+            document.getElementById('avgChips').value = data.avgChips;
+            document.getElementById('totalChips').value = data.totalChips;
+            document.getElementById('blinds').value = data.blinds;
+            document.getElementById('ante').value = data.ante;
+            document.getElementById('nextLevel').value = data.nextLevel;
+        }
+
+        function resetForm() {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="password"], input[type="tel"], input[type="email"], textarea, select');
+            inputs.forEach(input => {
+                input.value = '';
+            });
         }
 
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
-            return `${padTime(minutes)}:${padTime(remainingSeconds)}`;
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
         }
 
-        function updateTime() {
-            const timeElement = document.querySelector('#time span.num');
-            const now = new Date();
-            const hours = padTime(now.getHours());
-            const minutes = padTime(now.getMinutes());
-            const seconds = padTime(now.getSeconds());
-            timeElement.textContent = `${hours}:${minutes}:${seconds}`;
-        }
+        function updateSavedSettingsList() {
+            const savedSettings = document.getElementById('savedSettings');
+            savedSettings.innerHTML = '';
+            for (let i = 0; i < localStorage.length; i++) {
+                const settingsName = localStorage.key(i);
+                const data = JSON.parse(localStorage.getItem(settingsName));
+                const listItem = document.createElement('li');
+                const settingsInfo = document.createElement('div');
+                settingsInfo.classList.add('settings-info');
+                settingsInfo.textContent = `${settingsName}\n(保存於: ${data.timestamp})`;
+                listItem.appendChild(settingsInfo);
 
-        function updateData() {
-            const storedData = localStorage.getItem('pokerData');
-            if (storedData) {
-                data = JSON.parse(storedData);
-            }
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '刪除';
+                deleteButton.onclick = function(event) {
+                    event.stopPropagation();
+                    localStorage.removeItem(settingsName);
+                    updateSavedSettingsList();
+                };
 
-            document.getElementById('title').innerHTML = `<span class="zh">${data.title}</span>`;
-            document.getElementById('level').innerHTML = `<span class="zh">當前級別:</span><span class="en">Current Level</span><span class="num">${data.level}</span>`;
-            document.getElementById('players-left').innerHTML = `<span class="zh">剩餘人數:</span><span class="en">Players Left</span><span class="num">${data.playersLeft}</span> `;
-            document.getElementById('entrants').innerHTML = `<span class="zh">參賽人數:</span><span class="en">Entrants</span><span class="num">${data.entrants}</span> `;
-            document.getElementById('avg-chips').innerHTML = `<span class="zh">平均記分牌:</span><span class="en">Avg. Chips</span><span class="num">${data.avgChips}</span>`;
-            document.getElementById('total-chips').innerHTML = `<span class="zh">總記分牌:</span><span class="en">Total Chips</span><span class="num">${data.totalChips}</span>`;
-            document.getElementById('next-level').innerHTML = `<span class="zh">下個級別:</span><span class="en">Next Level</span>`;
-            document.getElementById('next-level1').innerHTML = `<span class="num">${data.nextLevel}</span>`;
-            document.getElementById('blinds').innerHTML = `<span class="zh">盲注:</span><span class="en">Blinds</span>`;
-            document.getElementById('blinds1').innerHTML = `<span class="num">${data.blinds}</span>`;
-            document.getElementById('ante').innerHTML = `<span class="zh">前注:</span><span class="en">Ante</span>`;    
-            document.getElementById('ante1').innerHTML = `<span class="num">${data.ante}</span>`;    
-            document.getElementById('next-break').innerHTML = `<span class="zh">下次休息:</span><span class="en">Next Break</span><span class="num">${formatTime(data.nextBreak)}</span>`;
-            document.getElementById('remaining-time').innerHTML = `<span class="num">${formatTime(data.remainingTime)}</span>`;
-            
-        }
+                listItem.appendChild(deleteButton);
+                listItem.onclick = function() {
+                    loadData(settingsName);
+                };
 
-        function decrementPlayers() {
-            if (data.playersLeft > 0) {
-                data.playersLeft--;
-                document.querySelector('#players-left span.num').textContent = data.playersLeft;
-                saveData();
+                savedSettings.appendChild(listItem);
             }
         }
 
-        function incrementPlayers() {
-            data.playersLeft++;
-            document.querySelector('#players-left span.num').textContent = data.playersLeft;
-            saveData();
-        }
-
-        function decrementEntrants() {
-            if (data.entrants > 0) {
-                data.entrants--;
-                document.querySelector('#entrants span.num').textContent = data.entrants;
-                saveData();
-            }
-        }
-
-        function incrementEntrants() {
-            data.entrants++;
-            document.querySelector('#entrants span.num').textContent = data.entrants;
-            saveData();
-        }
-
-        function saveData() {
-            localStorage.setItem('pokerData', JSON.stringify(data));
-        }
-
-        function pause() {
-            isPaused = true;
-            intervalIds.forEach(id => clearInterval(id));
-            document.getElementById('pause-overlay').style.display = 'flex';
-            document.getElementById('pause-overlay').style.pointerEvents = 'auto';
-        }
-
-        function resume() {
-            isPaused = false;
-            document.getElementById('pause-overlay').style.display = 'none';
-            document.getElementById('pause-overlay').style.pointerEvents = 'none';
-            startTimers();
-        }
-
-        function startTimers() {
-            intervalIds.push(setInterval(updateTime, 1000));
-            intervalIds.push(setInterval(() => {
-                if (!isPaused && data.nextBreak > 0) {
-                    data.nextBreak--;
-                    document.querySelector('#next-break span.num').textContent = formatTime(data.nextBreak);
-                    saveData();
-                }
-            }, 1000));
-
-            intervalIds.push(setInterval(() => {
-                if (!isPaused && data.remainingTime > 0) {
-                    data.remainingTime--;
-                    document.querySelector('#remaining-time span.num').textContent = formatTime(data.remainingTime);
-                    saveData();
-                }
-            }, 1000));
-        }
-
-        updateData();
-        startTimers();
+        document.addEventListener('DOMContentLoaded', updateSavedSettingsList);
     </script>
 </body>
 </html>
