@@ -12,110 +12,235 @@
             background-color: #1e2b3a;
             color: #fff;
         }
-        .container {
-            display: grid;
-            grid-template-areas:
-                "title title title"
-                "level remaining-time time"
-                "players blinds break"
-                "entrants ante avg-chips"
-                ". next-level total-chips";
-            grid-template-rows: auto auto auto 1fr 1fr;
-            grid-template-columns: 1fr 1fr 1fr;
-            min-height: 100vh;
-            padding: 40px;
-            box-sizing: border-box;
-            background-color: #0c4175;
-            gap: 40px; 
-        }
+        
         .section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            position: absolute;
             padding: 20px;
             box-sizing: border-box;
         }
         .title {
-            grid-area: title;
-            font-size: 5rem;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 60px;
             font-weight: bold;
         }
         .time {
-            grid-area: time;
-            font-size: 4rem;
-            text-align: right;
+            top: 40px;
+            left: 75%;
+            font-size: 20px;
+            text-align: left;
+        }
+        .level, .players, .entrants, .break, .avg-chips, .total-chips, .blinds, .ante, .next-level {
+            font-size: 20px;
         }
         .level {
-            grid-area: level;
-            font-size: 4rem;
-            justify-content: flex-start;
-            text-align: left;
+            top: 25%;
+            right: 75%;
+            text-align: right;
         }
         .players {
-            grid-area: players;
-            font-size: 4rem;
-            justify-content: flex-start;
-            text-align: left;
+            top: 50%;
+            right: 75%;
+            text-align: right;
         }
         .entrants {
-            grid-area: entrants;
-            font-size: 4rem;
-            justify-content: flex-start;
-            text-align: left;
+            top: 75%;
+            right: 75%;
+            text-align: right;
         }
         .break {
-            grid-area: break;
-            font-size: 4rem;
-            text-align: right;
+            top: 25%;
+            left: 75%;
+            text-align: left;
         }
         .avg-chips {
-            grid-area: avg-chips;
-            font-size: 4rem;
-            text-align: right;
+            top: 50%;
+            left: 75%;
+            text-align: left;
         }
         .total-chips {
-            grid-area: total-chips;
-            font-size: 4rem;
-            text-align: right;
+            top: 75%;
+            left: 75%;
+            text-align: left;
         }
         .remaining-time {
-            grid-area: remaining-time;
-            font-size: 4rem;
+            top: 100px;
+            left: 50%;
+            font-size: 200px;
+            transform: translateX(-50%);
             font-weight: bold;
+            text-align: center;
         }
         .blinds {
-            grid-area: blinds;
-            font-size: 4rem;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
             font-weight: bold;
+            text-align: center;
         }
         .ante {
-            grid-area: ante;
-            font-size: 4rem;
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%);
             font-weight: bold;
+            text-align: center;
         }
         .next-level {
-            grid-area: next-level;
-            font-size: 4rem;
+            top: 90%;
+            left: 50%;
+            transform: translateX(-50%);
             font-weight: bold;
+            text-align: center;
+        }
+        .button {
+            background-color: #1e2b3a;
+            border: 1px solid #fff;
+            color: #fff;
+            font-size: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .button1 {
+            background-color: #1e2b3a;
+            border: 1px solid #fff;
+            color: #fff;
+            font-size: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .pause-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            z-index: 10;
+            display: none;
+            pointer-events: none;
+        }
+        .top-right-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .adjust-buttons1 {
+            position: fixed;
+            top: 60%;
+            right: 75%;
+            display: flex;
+            gap: 1px;
+            z-index: 20;
+        }
+        .adjust-buttons2 {
+            position: fixed;
+            top: 85%;
+            right: 75%;
+            display: flex;
+            gap: 1px;
+            z-index: 20;
+        }
+        .section span.zh {
+            display: block;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        .section span.en {
+            display: block;
+            font-family: 'Arial', sans-serif;
+            font-size: 15px;
+        }
+        .section span.num {
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
 <body>
     <div class="container" id="container">
-        <div class="section title" id="title">下午茶</div>
-        <div class="section remaining-time" id="remaining-time">剩餘時間: 00:00:00</div>
-        <div class="section next-level" id="next-level">下個級別: 0/0 [0]</div>
-        <div class="section level" id="level">當前級別: 8</div>
-        <div class="section players" id="players-left">剩餘人數: 11</div>
-        <div class="section entrants" id="entrants">參賽人數: 23</div>
-        <div class="section time" id="time">現在時間: 12:48:00</div>
-        <div class="section break" id="next-break">下次休息: 00:12:48</div>
-        <div class="section avg-chips" id="avg-chips">平均記分牌: 41,818</div>
-        <div class="section total-chips" id="total-chips">總記分牌: 460,000</div>
-        <div class="section blinds" id="blinds">盲注: 0/0</div>
-        <div class="section ante" id="ante">前注: 0</div>
+        <div class="section title" id="title">
+            <span class="zh">下午茶</span>
+        </div>
+        <div class="section remaining-time" id="remaining-time">
+            <span class="num">00:00:00</span>
+        </div>
+        <div class="section next-level" id="next-level">
+            <span class="zh">下個級別:</span>
+            <span class="en">Next Level:</span>
+            <span class="num">0/0</span>
+            <span class="zh">[</span>
+            <span class="num">0</span>
+            <span class="zh">]</span>
+        </div>
+        <div class="section level" id="level">
+            <span class="zh">當前級別:</span>
+            <span class="en">Current Level:</span>
+            <span class="num">8</span>
+        </div>
+        <div class="section players" id="players-left">
+            <span class="zh">剩餘人數:</span>
+            <span class="en">Players Left:</span>
+            <span class="num">11</span>
+        </div>
+        <div class="adjust-buttons1">
+            <button class="button1" onclick="decrementPlayers()">-</button>
+            <button class="button1" onclick="incrementPlayers()">+</button>
+        </div>
+        
+        <div class="section entrants" id="entrants">
+            <span class="zh">參賽人數:</span>
+            <span class="en">Entrants:</span>
+            <span class="num">23</span>
+        </div>
+        <div class="adjust-buttons2">
+            <button class="button1" onclick="ecrementEntrants()">-</button>
+            <button class="button1" onclick="incrementEntrants()">+</button>
+        </div>
+        <div class="section time" id="time">
+            <span class="zh">現在時間:</span>
+            <span class="en">Current Time:</span>
+            <span class="num">12:48:00</span>
+        </div>
+        <div class="section break" id="next-break">
+            <span class="zh">下次休息:</span>
+            <span class="en">Next Break:</span>
+            <span class="num">00:12:48</span>
+        </div>
+        <div class="section avg-chips" id="avg-chips">
+            <span class="zh">平均記分牌:</span>
+            <span class="en">Avg. Chips:</span>
+            <span class="num">41,818</span>
+        </div>
+        <div class="section total-chips" id="total-chips">
+            <span class="zh">總記分牌:</span>
+            <span class="en">Total Chips:</span>
+            <span class="num">460,000</span>
+        </div>
+        <div class="section blinds" id="blinds">
+            <span class="zh">盲注:</span>
+            <span class="en">Blinds:</span>
+            <span class="num">0/0</span>
+        </div>
+        <div class="section ante" id="ante">
+            <span class="zh">前注:</span>
+            <span class="en">Ante:</span>
+            <span class="num">0</span>
+        </div>
     </div>
+    <div class="top-right-buttons">
+        <button class="button" onclick="pause()">暫停</button>
+        <button class="button" onclick="resume()">繼續</button>
+    </div>
+    <div class="pause-overlay" id="pause-overlay">Pause</div>
     <script>
         let data = {
             title: '下午茶',
@@ -131,13 +256,26 @@
             remainingTime: 3600
         };
 
+        let isPaused = false;
+        let intervalIds = [];
+
+        function padTime(number) {
+            return String(number).padStart(2, '0');
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${padTime(minutes)}:${padTime(remainingSeconds)}`;
+        }
+
         function updateTime() {
-            const timeElement = document.querySelector('#time');
+            const timeElement = document.querySelector('#time span.num');
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            timeElement.textContent = `現在時間: ${hours}:${minutes}:${seconds}`;
+            const hours = padTime(now.getHours());
+            const minutes = padTime(now.getMinutes());
+            const seconds = padTime(now.getSeconds());
+            timeElement.textContent = `${hours}:${minutes}:${seconds}`;
         }
 
         function updateData() {
@@ -146,60 +284,86 @@
                 data = JSON.parse(storedData);
             }
 
-            document.getElementById('title').textContent = data.title;
-            document.getElementById('level').textContent = `當前級別: ${data.level}`;
-            document.getElementById('players-left').textContent = `剩餘人數: ${data.playersLeft}`;
-            document.getElementById('entrants').textContent = `參賽人數: ${data.entrants}`;
-            document.getElementById('avg-chips').textContent = `平均記分牌: ${data.avgChips}`;
-            document.getElementById('total-chips').textContent = `總記分牌: ${data.totalChips}`;
-            document.getElementById('next-level').textContent = `下個級別: ${data.nextLevel}`;
-            document.getElementById('blinds').textContent = `盲注 : ${data.blinds}`;
-            document.getElementById('ante').textContent = `前注: ${data.ante}`;
+            document.getElementById('title').innerHTML = `<span class="zh">${data.title}</span>`;
+            document.getElementById('level').innerHTML = `<span class="zh">當前級別:</span><span class="en">Current Level</span><span class="num">${data.level}</span>`;
+            document.getElementById('players-left').innerHTML = `<span class="zh">剩餘人數:</span><span class="en">Players Left</span><span class="num">${data.playersLeft}</span> `;
+            document.getElementById('entrants').innerHTML = `<span class="zh">參賽人數:</span><span class="en">Entrants</span><span class="num">${data.entrants}</span> `;
+            document.getElementById('avg-chips').innerHTML = `<span class="zh">平均記分牌:</span><span class="en">Avg. Chips</span><span class="num">${data.avgChips}</span>`;
+            document.getElementById('total-chips').innerHTML = `<span class="zh">總記分牌:</span><span class="en">Total Chips</span><span class="num">${data.totalChips}</span>`;
+            document.getElementById('next-level').innerHTML = `<span class="zh">下個級別:</span><span class="en">Next Level</span><span class="num">${data.nextLevel}</span>`;
+            document.getElementById('blinds').innerHTML = `<span class="zh">盲注:</span><span class="en">Blinds</span><span class="num">${data.blinds}</span>`;
+            document.getElementById('ante').innerHTML = `<span class="zh">前注:</span><span class="en">Ante</span><span class="num">${data.ante}</span>`;
+            document.getElementById('next-break').innerHTML = `<span class="zh">下次休息:</span><span class="en">Next Break</span><span class="num">${formatTime(data.nextBreak)}</span>`;
+            document.getElementById('remaining-time').innerHTML = `<span class="num">${formatTime(data.remainingTime)}</span>`;
         }
 
-        function updateCountdown() {
-            const nextBreakElement = document.getElementById('next-break');
-            let minutes = Math.floor(data.nextBreak / 60);
-            let seconds = data.nextBreak % 60;
-            nextBreakElement.textContent = `下次休息: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            if (data.nextBreak > 0) {
-                data.nextBreak--;
+        function decrementPlayers() {
+            if (data.playersLeft > 0) {
+                data.playersLeft--;
+                document.querySelector('#players-left span.num').textContent = data.playersLeft;
+                saveData();
             }
         }
 
-        function updateRemainingTime() {
-            const remainingTimeElement = document.getElementById('remaining-time');
-            let minutes = Math.floor(data.remainingTime / 60);
-            let seconds = data.remainingTime % 60;
-            remainingTimeElement.textContent = `剩餘時間: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            if (data.remainingTime > 0) {
-                data.remainingTime--;
+        function incrementPlayers() {
+            data.playersLeft++;
+            document.querySelector('#players-left span.num').textContent = data.playersLeft;
+            saveData();
+        }
+
+        function decrementEntrants() {
+            if (data.entrants > 0) {
+                data.entrants--;
+                document.querySelector('#entrants span.num').textContent = data.entrants;
+                saveData();
             }
         }
 
-        function enterFullscreen() {
-            const container = document.getElementById('container');
-            if (container.requestFullscreen) {
-                container.requestFullscreen();
-            } else if (container.mozRequestFullScreen) { // Firefox
-                container.mozRequestFullScreen();
-            } else if (container.webkitRequestFullscreen) { // Chrome, Safari, Opera
-                container.webkitRequestFullscreen();
-            } else if (container.msRequestFullscreen) { // IE/Edge
-                container.msRequestFullscreen();
-            }
+        function incrementEntrants() {
+            data.entrants++;
+            document.querySelector('#entrants span.num').textContent = data.entrants;
+            saveData();
         }
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            enterFullscreen();
-            updateData();
-            updateTime();
-            updateCountdown();
-            updateRemainingTime();
-            setInterval(updateTime, 1000);
-            setInterval(updateCountdown, 1000);
-            setInterval(updateRemainingTime, 1000);
-        });
+        function saveData() {
+            localStorage.setItem('pokerData', JSON.stringify(data));
+        }
+
+        function pause() {
+            isPaused = true;
+            intervalIds.forEach(id => clearInterval(id));
+            document.getElementById('pause-overlay').style.display = 'flex';
+            document.getElementById('pause-overlay').style.pointerEvents = 'auto';
+        }
+
+        function resume() {
+            isPaused = false;
+            document.getElementById('pause-overlay').style.display = 'none';
+            document.getElementById('pause-overlay').style.pointerEvents = 'none';
+            startTimers();
+        }
+
+        function startTimers() {
+            intervalIds.push(setInterval(updateTime, 1000));
+            intervalIds.push(setInterval(() => {
+                if (!isPaused && data.nextBreak > 0) {
+                    data.nextBreak--;
+                    document.querySelector('#next-break span.num').textContent = formatTime(data.nextBreak);
+                    saveData();
+                }
+            }, 1000));
+
+            intervalIds.push(setInterval(() => {
+                if (!isPaused && data.remainingTime > 0) {
+                    data.remainingTime--;
+                    document.querySelector('#remaining-time span.num').textContent = formatTime(data.remainingTime);
+                    saveData();
+                }
+            }, 1000));
+        }
+
+        updateData();
+        startTimers();
     </script>
 </body>
 </html>
