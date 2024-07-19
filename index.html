@@ -161,6 +161,22 @@
             display: none;
             pointer-events: none;
         }
+        .end-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            z-index: 10;
+            display: none;
+            pointer-events: none;
+        }
         .top-right-buttons {
             position: fixed;
             top: 20px;
@@ -282,6 +298,7 @@
         <button class="button" onclick="resume()">繼續</button>
     </div>
     <div class="pause-overlay" id="pause-overlay">Pause</div>
+    <div class="end-overlay" id="end-overlay">比賽結束 END</div>
     <script>
         let data = {
             title: '下午茶',
@@ -403,8 +420,14 @@
                     data.remainingTime--;
                     document.querySelector('#remaining-time span.num').textContent = formatTime(data.remainingTime);
                     saveData();
+                } else if (data.remainingTime === 0) {
+                    showEndScreen();
                 }
             }, 1000));
+        }
+        function showEndScreen() {
+            document.getElementById('end-overlay').style.display = 'flex';
+            document.getElementById('end-overlay').style.pointerEvents = 'auto';
         }
 
         updateData();
