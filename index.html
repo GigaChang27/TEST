@@ -32,7 +32,7 @@
             text-align: left;
         }
         .level, .players, .entrants, .break, .avg-chips, .total-chips, .blinds, .ante, .next-level {
-            font-size: 20px;
+            font-size: 30px;
         }
         .level {
             top: 25%;
@@ -73,25 +73,46 @@
             text-align: center;
         }
         .blinds {
-            top: 50%;
-            left: 50%;
+            top: 60%;
+            left: 30%;
             transform: translateX(-50%);
             font-weight: bold;
-            text-align: center;
+            text-align: left;
         }
         .ante {
             top: 70%;
-            left: 50%;
+            left: 30%;
             transform: translateX(-50%);
             font-weight: bold;
-            text-align: center;
+            text-align: left;
         }
         .next-level {
-            top: 90%;
-            left: 50%;
+            top: 80%;
+            left: 32.5%;
             transform: translateX(-50%);
             font-weight: bold;
-            text-align: center;
+            text-align: left;
+        }
+        .blinds1 {
+            top: 60%;
+            right: 25%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            text-align: right;
+        }
+        .ante1 {
+            top: 70%;
+            right: 26.5%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            text-align: right;
+        }
+        .next-level1 {
+            top: 80%;
+            right: 25%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            text-align: right;
         }
         .button {
             background-color: #1e2b3a;
@@ -137,7 +158,7 @@
         }
         .adjust-buttons1 {
             position: fixed;
-            top: 60%;
+            top: 70%;
             right: 75%;
             display: flex;
             gap: 1px;
@@ -145,7 +166,7 @@
         }
         .adjust-buttons2 {
             position: fixed;
-            top: 85%;
+            top: 95%;
             right: 75%;
             display: flex;
             gap: 1px;
@@ -176,11 +197,14 @@
         <div class="section next-level" id="next-level">
             <span class="zh">下個級別:</span>
             <span class="en">Next Level:</span>
+        </div>
+        <div class="section next-level1" id="next-level1">
             <span class="num">0/0</span>
             <span class="zh">[</span>
             <span class="num">0</span>
             <span class="zh">]</span>
         </div>
+        
         <div class="section level" id="level">
             <span class="zh">當前級別:</span>
             <span class="en">Current Level:</span>
@@ -202,7 +226,7 @@
             <span class="num">23</span>
         </div>
         <div class="adjust-buttons2">
-            <button class="button1" onclick="ecrementEntrants()">-</button>
+            <button class="button1" onclick="decrementEntrants()">-</button>
             <button class="button1" onclick="incrementEntrants()">+</button>
         </div>
         <div class="section time" id="time">
@@ -227,13 +251,17 @@
         </div>
         <div class="section blinds" id="blinds">
             <span class="zh">盲注:</span>
-            <span class="en">Blinds:</span>
+            <span class="en">Blinds:</span>  
+        </div>
+        <div class="section blinds1" id="blinds1">
             <span class="num">0/0</span>
+        </div>
+        <div class="section ante1" id="ante1">
+            <span class="num">0</span>
         </div>
         <div class="section ante" id="ante">
             <span class="zh">前注:</span>
             <span class="en">Ante:</span>
-            <span class="num">0</span>
         </div>
     </div>
     <div class="top-right-buttons">
@@ -290,11 +318,15 @@
             document.getElementById('entrants').innerHTML = `<span class="zh">參賽人數:</span><span class="en">Entrants</span><span class="num">${data.entrants}</span> `;
             document.getElementById('avg-chips').innerHTML = `<span class="zh">平均記分牌:</span><span class="en">Avg. Chips</span><span class="num">${data.avgChips}</span>`;
             document.getElementById('total-chips').innerHTML = `<span class="zh">總記分牌:</span><span class="en">Total Chips</span><span class="num">${data.totalChips}</span>`;
-            document.getElementById('next-level').innerHTML = `<span class="zh">下個級別:</span><span class="en">Next Level</span><span class="num">${data.nextLevel}</span>`;
-            document.getElementById('blinds').innerHTML = `<span class="zh">盲注:</span><span class="en">Blinds</span><span class="num">${data.blinds}</span>`;
-            document.getElementById('ante').innerHTML = `<span class="zh">前注:</span><span class="en">Ante</span><span class="num">${data.ante}</span>`;
+            document.getElementById('next-level').innerHTML = `<span class="zh">下個級別:</span><span class="en">Next Level</span>`;
+            document.getElementById('next-level1').innerHTML = `<span class="num">${data.nextLevel}</span>`;
+            document.getElementById('blinds').innerHTML = `<span class="zh">盲注:</span><span class="en">Blinds</span>`;
+            document.getElementById('blinds1').innerHTML = `<span class="num">${data.blinds}</span>`;
+            document.getElementById('ante').innerHTML = `<span class="zh">前注:</span><span class="en">Ante</span>`;    
+            document.getElementById('ante1').innerHTML = `<span class="num">${data.ante}</span>`;    
             document.getElementById('next-break').innerHTML = `<span class="zh">下次休息:</span><span class="en">Next Break</span><span class="num">${formatTime(data.nextBreak)}</span>`;
             document.getElementById('remaining-time').innerHTML = `<span class="num">${formatTime(data.remainingTime)}</span>`;
+            
         }
 
         function decrementPlayers() {
